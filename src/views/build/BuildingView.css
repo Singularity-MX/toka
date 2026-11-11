@@ -1,0 +1,471 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --toka-forest: #16312B;
+  --toka-green: #5B7F3A;
+  --toka-light: #CFE3C4;
+  --toka-wheat: #D9A92E;
+  --toka-blue: #2F6F8F;
+  --toka-earth: #8A6A4B;
+  --toka-cream: #F5F5EE;
+  --toka-white: #FFFFFF;
+}
+
+.toka-building {
+  min-height: 100vh;
+  background: var(--toka-cream);
+  color: var(--toka-forest);
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* HEADER */
+
+.toka-header {
+  width: min(1240px, 90%);
+  margin: 0 auto;
+  padding: 30px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.toka-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--toka-forest);
+}
+
+.toka-logo-icon {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+
+.toka-logo-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.toka-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.toka-logo-text strong {
+  font-family: 'Nunito', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.toka-logo-text small {
+  font-size: 11px;
+  color: #68786A;
+  margin-top: 5px;
+}
+
+.toka-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 16px;
+  border-radius: 30px;
+  background: #E5EEDC;
+  color: var(--toka-green);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.toka-status-dot,
+.label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #5B9A44;
+  box-shadow: 0 0 0 4px rgba(91, 154, 68, .12);
+}
+
+/* HERO */
+
+.toka-hero {
+  width: min(1240px, 90%);
+  margin: auto;
+  padding: 55px 0 65px;
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  align-items: center;
+  gap: 45px;
+}
+
+.toka-hero-content {
+  max-width: 570px;
+  animation: toka-appear .8s ease both;
+}
+
+.toka-eyebrow {
+  display: inline-block;
+  color: var(--toka-green);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+}
+
+.toka-hero-content h1 {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 1.12;
+  letter-spacing: -2px;
+  font-weight: 800;
+  margin: 0 0 25px;
+  color: var(--toka-forest);
+}
+
+.toka-hero-content h1 span {
+  display: block;
+  color: var(--toka-green);
+}
+
+.toka-description {
+  font-size: 16px;
+  line-height: 1.85;
+  color: #647466;
+  max-width: 510px;
+  margin-bottom: 30px;
+}
+
+/* MESSAGE */
+
+.toka-message {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px;
+  background: #E9EFDF;
+  border-left: 4px solid var(--toka-wheat);
+  border-radius: 5px 13px 13px 5px;
+  max-width: 480px;
+}
+
+.toka-message-icon {
+  font-size: 26px;
+  color: var(--toka-green);
+}
+
+.toka-message strong {
+  font-size: 13px;
+  display: block;
+}
+
+.toka-message p {
+  color: #718071;
+  font-size: 12px;
+  margin: 5px 0 0;
+}
+
+/* FEATURES */
+
+.toka-features {
+  display: flex;
+  gap: 30px;
+  margin-top: 35px;
+  flex-wrap: wrap;
+}
+
+.toka-features div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.toka-features span {
+  color: var(--toka-wheat);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.toka-features p {
+  margin: 0;
+  color: var(--toka-forest);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ILLUSTRATION */
+
+.toka-illustration {
+  position: relative;
+  padding: 20px;
+  background: #E9EFDF;
+  border-radius: 30px;
+  overflow: hidden;
+  animation: toka-appear 1s ease .15s both;
+}
+
+.toka-illustration::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .4);
+  top: -130px;
+  right: -100px;
+}
+
+.toka-illustration-label {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--toka-green);
+  padding: 8px 12px;
+}
+
+.toka-farm-svg {
+  display: block;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+}
+
+.toka-data-card {
+  position: absolute;
+  z-index: 2;
+  bottom: 28px;
+  left: 28px;
+  right: 28px;
+  padding: 15px 18px;
+  background: rgba(255, 255, 255, .92);
+  border: 1px solid rgba(22, 49, 43, .08);
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  box-shadow: 0 8px 25px rgba(22, 49, 43, .08);
+}
+
+.data-card-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: #E4EDD9;
+  border-radius: 10px;
+  color: var(--toka-green);
+  font-size: 24px;
+}
+
+.toka-data-card strong {
+  display: block;
+  font-size: 12px;
+  color: var(--toka-forest);
+}
+
+.toka-data-card span {
+  display: block;
+  font-size: 10px;
+  color: #718071;
+  margin-top: 4px;
+}
+
+/* BOTTOM */
+
+.toka-bottom {
+  width: min(1240px, 90%);
+  margin: 0 auto;
+  padding: 25px 0;
+  border-top: 1px solid #DDE5D5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.toka-bottom-text {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.toka-bottom-icon {
+  color: var(--toka-green);
+  font-size: 28px;
+}
+
+.toka-bottom-text strong {
+  font-size: 13px;
+}
+
+.toka-bottom-text p {
+  margin: 4px 0 0;
+  color: #819080;
+  font-size: 12px;
+}
+
+.toka-contact {
+  color: var(--toka-green);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.toka-contact:hover {
+  color: var(--toka-forest);
+}
+
+/* FOOTER */
+
+.toka-footer {
+  width: min(1240px, 90%);
+  margin: 0 auto;
+  padding: 20px 0 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-top: 1px solid #E4E9DF;
+  color: #849181;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.toka-footer span:first-child {
+  color: var(--toka-forest);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* ANIMATIONS */
+
+@keyframes toka-appear {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .toka-hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 35px 0 45px;
+  }
+
+  .toka-hero-content {
+    max-width: 700px;
+  }
+
+  .toka-illustration {
+    max-width: 650px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .toka-header {
+    padding: 20px 0;
+  }
+
+  .toka-logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .toka-logo-text strong {
+    font-size: 23px;
+  }
+
+  .toka-logo-text small {
+    font-size: 9px;
+  }
+
+  .toka-status {
+    padding: 8px 10px;
+    font-size: 9px;
+  }
+
+  .toka-hero {
+    padding: 35px 0;
+    gap: 30px;
+  }
+
+  .toka-hero-content h1 {
+    font-size: 39px;
+    letter-spacing: -1.5px;
+  }
+
+  .toka-description {
+    font-size: 14px;
+  }
+
+  .toka-features {
+    gap: 18px;
+  }
+
+  .toka-features p {
+    font-size: 10px;
+  }
+
+  .toka-illustration {
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  .toka-data-card {
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    padding: 10px;
+  }
+
+  .toka-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 22px 0;
+  }
+
+  .toka-footer {
+    font-size: 8px;
+    flex-wrap: wrap;
+  }
+
+  .toka-footer span:nth-child(2) {
+    order: 3;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toka-building *,
+  .toka-building *::before,
+  .toka-building *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

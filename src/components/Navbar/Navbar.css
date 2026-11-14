@@ -1,0 +1,316 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: 1fr minmax(240px, 520px) 1fr;
+  align-items: center;
+  gap: 16px;
+  height: 76px;
+  padding: 0 40px 0 130px; /* deja pasar a la barra lateral */
+  background: #17332b;
+  color: #ffffff;
+  font-family: "Nunito", system-ui, sans-serif;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+}
+
+.navbar__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.navbar__brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  min-width: 0;
+}
+
+.navbar__title {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.navbar__tagline {
+  font-size: 13px;
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+/* Ant Design Input -> píldora translúcida */
+.navbar .navbar__search.ant-input-affix-wrapper {
+  height: 46px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.navbar .navbar__search.ant-input-affix-wrapper:hover,
+.navbar .navbar__search.ant-input-affix-wrapper-focused {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.navbar .navbar__search .ant-input {
+  background: transparent;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.navbar .navbar__search .ant-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.navbar .navbar__search .ant-input-prefix {
+  margin-inline-end: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 18px;
+}
+
+.navbar .navbar__search .ant-input-clear-icon {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.navbar__info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 22px;
+}
+
+.navbar__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.navbar__bell {
+  display: flex;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.navbar .navbar__avatar {
+  background: #e0a923;
+  color: #17332b;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* ---------- Escritorio estrecho ---------- */
+@media (max-width: 1280px) {
+  .navbar__tagline,
+  .navbar__chip--weather {
+    display: none;
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar:not(.navbar--mobile) {
+    grid-template-columns: auto 1fr auto;
+    padding: 0 20px 0 130px;
+  }
+  .navbar:not(.navbar--mobile) .navbar__chip--location {
+    display: none;
+  }
+}
+
+/* ---------- Móvil (prop isMobile) ---------- */
+.navbar.navbar--mobile {
+  grid-template-columns: 1fr auto;
+  height: 64px;
+  padding: 0 14px 0 8px;
+  gap: 10px;
+}
+
+.navbar--mobile .navbar__title { font-size: 24px; }
+.navbar--mobile .navbar__tagline { display: block; font-size: 11px; }
+.navbar--mobile .navbar__info { gap: 8px; }
+
+.navbar__burger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 22px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.navbar__burger:hover,
+.navbar__burger[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.navbar__burger:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 380px) {
+  .navbar--mobile .navbar__tagline { display: none; }
+}
+
+/* ---------- Drawer móvil: tarjeta blanca flotante, como el sidebar ---------- */
+.navbar-drawer .ant-drawer-content-wrapper {
+  height: calc(100% - 24px) !important;
+  margin: 12px;
+  box-shadow: none !important;
+}
+
+.navbar-drawer .ant-drawer-content {
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+}
+
+.navbar-drawer .ant-drawer-body {
+  display: flex;
+  padding: 20px 14px;
+  font-family: "Nunito", system-ui, sans-serif;
+}
+
+.navbar-menu {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+}
+
+.navbar-menu__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 6px;
+}
+
+.navbar-menu__brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  color: #17332b;
+}
+
+.navbar-menu__brand strong { font-size: 26px; font-weight: 800; }
+.navbar-menu__brand span { font-size: 12px; color: #4d6a5e; }
+
+.navbar-menu__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #17332b;
+  cursor: pointer;
+}
+
+.navbar-menu__close:hover { background: #e3efdc; }
+
+.navbar-drawer .navbar-menu__search.ant-input-affix-wrapper {
+  height: 46px;
+  padding: 0 16px;
+  border: 1.5px solid #dfe3d3;
+  border-radius: 999px;
+  background: #fbfbf6;
+}
+
+.navbar-drawer .navbar-menu__search .ant-input { background: transparent; font-size: 15px; }
+.navbar-drawer .navbar-menu__search .ant-input-prefix { margin-inline-end: 10px; color: #17332b; }
+
+.navbar-menu__divider {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #e3e3e3;
+}
+
+.navbar-menu__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.navbar-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 6px 10px 6px 6px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: #17332b;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.navbar-menu__item:hover,
+.navbar-menu__item.is-active {
+  background: #e3efdc;
+}
+
+.navbar-menu__item.is-active { font-weight: 800; }
+
+.navbar-menu__item:focus-visible {
+  outline: 2px solid #1b3a2f;
+  outline-offset: 2px;
+}
+
+.navbar-menu__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 22px;
+  color: #17332b;
+}
+
+.navbar-menu__item.is-active .navbar-menu__icon { color: #4f7a34; }
+
+.navbar-menu__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.navbar-menu__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  padding: 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #3b5a4d;
+}
+
+.navbar-menu__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}

@@ -1,8 +1,13 @@
 import { useState } from 'react'
-import './Landing.css'
-import { useAuth } from '../../auth/useAuth'
-import AuthModal, { GoogleLogo } from './AuthModal'
+import { useNavigate } from 'react-router-dom'
 
+import './Landing.css'
+
+import { useAuth } from '../../auth/useAuth'
+import { auth } from '../../services/firebase'
+
+import AuthModal, { GoogleLogo } from './components/AuthModal'
+import { urlBackend } from '../../config/backend.config'
 const ROTATIONS = [
   {
     id: 'actual',
@@ -297,15 +302,107 @@ function ParcelDemo() {
   )
 }
 
+
 function Landing() {
-  const { user, loading, busy, error, signIn, logout, clearError } = useAuth()
+  const {
+    user,
+    loading,
+    busy,
+    error,
+    signIn,
+    logout,
+    clearError
+  } = useAuth()
+
+  const navigate = useNavigate()
+
   const [authOpen, setAuthOpen] = useState(false)
+  const [checkingAccount, setCheckingAccount] = useState(false)
+  const [backendError, setBackendError] = useState('')
+
+  const firstName = user?.displayName?.split(' ')[0] || 'agricultor'
 
   const openAuth = () => {
     clearError()
+    setBackendError('')
     setAuthOpen(true)
   }
-  const firstName = user?.displayName?.split(' ')[0] || 'agricultor'
+
+  /**
+   * Flujo:
+   * 1. Autenticación con Google mediante Firebase.
+   * 2. Obtención del ID Token.
+   * 3. Validación de existencia de cuenta en el backend.
+   * 4. Navegación según la respuesta.
+   */
+  const handleLogin = async () => {
+    try {
+      setBackendError('')
+      setCheckingAccount(true)
+
+      // 1. Iniciar sesión con Google
+      const authenticated = await signIn()
+
+      if (!authenticated) {
+        return false
+      }
+
+      // 2. Obtener el usuario autenticado
+      const currentUser = auth.currentUser
+      console.log('Usuario autenticado:', currentUser)
+
+      if (!currentUser) {
+        throw new Error('No se encontró una sesión autenticada.')
+      }
+      console.log('Token de Firebase:', await currentUser.getIdToken())
+
+      // 3. Obtener el token de Firebase
+      const token = await currentUser.getIdToken()
+      console.log('host del backend:', urlBackend)
+      // 4. Consultar el backend
+      const response = await fetch(
+        `${urlBackend}/auth/account`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error(
+          `Error al validar la cuenta. Código HTTP: ${response.status}`
+        )
+      }
+
+      const data = await response.json()
+
+      // 5. Cerrar modal y navegar según la respuesta
+      setAuthOpen(false)
+
+      if (data.exists) {
+        navigate('/app', { replace: true })
+      } else {
+        navigate('/registro', { replace: true })
+      }
+
+      return true
+
+    } catch (err) {
+      console.error('Error durante la autenticación:', err)
+
+      setBackendError(
+        err.message || 'No fue posible validar tu cuenta.'
+      )
+
+      return false
+
+    } finally {
+      setCheckingAccount(false)
+    }
+  }
 
   return (
     <>
@@ -314,21 +411,42 @@ function Landing() {
           <a href="#inicio" className="logo">
             Toka
           </a>
+
           <nav aria-label="Principal">
             <a href="#parcela">Tu parcela</a>
             <a href="#como-funciona">Cómo funciona</a>
             <a href="#datos">Datos</a>
+
             {!loading &&
               (user ? (
                 <div className="user-chip">
-                  {user.photoURL && <img src={user.photoURL} alt="" className="avatar" referrerPolicy="no-referrer" />}
-                  <span className="user-name">{firstName}</span>
-                  <button type="button" className="btn-link" onClick={logout}>
+                  {user.photoURL && (
+                    <img
+                      src={user.photoURL}
+                      alt=""
+                      className="avatar"
+                      referrerPolicy="no-referrer"
+                    />
+                  )}
+
+                  <span className="user-name">
+                    {firstName}
+                  </span>
+
+                  <button
+                    type="button"
+                    className="btn-link"
+                    onClick={logout}
+                  >
                     Salir
                   </button>
                 </div>
               ) : (
-                <button type="button" className="btn btn-small" onClick={openAuth}>
+                <button
+                  type="button"
+                  className="btn btn-small"
+                  onClick={openAuth}
+                >
                   Acceder
                 </button>
               ))}
@@ -337,30 +455,46 @@ function Landing() {
 
         <section id="inicio" className="hero">
           <div className="hero-copy">
-            <h1 style={{color:"white"}}>Marca tu parcela. Toka te dice qué sembrar después.</h1>
+            <h1 style={{ color: 'white' }}>
+              Marca tu parcela. Toka te dice qué sembrar después.
+            </h1>
+
             <p className="lead">
-              Toka combina observaciones de la Tierra de la NASA con lo que tú sabes de tu campo para
-              comparar rotaciones de cultivo que cuidan el suelo y el agua.
+              Toka combina observaciones de la Tierra de la NASA
+              con lo que tú sabes de tu campo para comparar
+              rotaciones de cultivo que cuidan el suelo y el agua.
             </p>
+
             <div className="hero-actions">
               {user ? (
-                <a href="#mis-parcelas" className="btn btn-wheat">
+                <button
+                  type="button"
+                  className="btn btn-wheat"
+                  onClick={() => navigate('/app')}
+                >
                   Ir a mis parcelas
-                </a>
+                </button>
               ) : (
-                <button type="button" className="btn btn-wheat" onClick={openAuth}>
+                <button
+                  type="button"
+                  className="btn btn-wheat"
+                  onClick={openAuth}
+                >
                   Crear mi cuenta
                 </button>
               )}
+
               <a href="#parcela" className="btn btn-ghost">
                 Ver un ejemplo
               </a>
             </div>
           </div>
+
           <div className="hero-globe">
             <Globe />
           </div>
         </section>
+
         <Landscape />
       </div>
 
@@ -368,9 +502,10 @@ function Landing() {
         {user && (
           <section id="mis-parcelas" className="welcome">
             <h2>Hola, {firstName}</h2>
+
             <p>
-              Tu cuenta está lista. Aquí aparecerán tus parcelas: marca la primera y Toka comparará
-              rotaciones para ella.
+              Tu cuenta está lista. Aquí aparecerán tus parcelas:
+              marca la primera y Toka comparará rotaciones para ella.
             </p>
           </section>
         )}
@@ -378,31 +513,44 @@ function Landing() {
         <section id="parcela" className="orbit">
           <div className="orbit-copy">
             <h2>De la órbita a tu parcela</h2>
+
             <p>
-              Los satélites miran tu campo desde 700 kilómetros de altura, todos los días y desde hace
-              décadas. Toka convierte esa historia de lluvia, calor y humedad en una comparación clara
-              entre tu rotación actual y dos alternativas.
+              Los satélites miran tu campo desde 700 kilómetros
+              de altura, todos los días y desde hace décadas.
+              Toka convierte esa historia de lluvia, calor y humedad
+              en una comparación clara entre tu rotación actual
+              y dos alternativas.
             </p>
+
             <p>
-              Tú conoces tu tierra desde adentro. El satélite la ve desde arriba. Las mejores decisiones
-              salen de juntar las dos miradas.
+              Tú conoces tu tierra desde adentro. El satélite
+              la ve desde arriba. Las mejores decisiones salen
+              de juntar las dos miradas.
             </p>
+
             <p className="trust">
-              Toka es una herramienta de apoyo. No reemplaza tu criterio ni el de tu técnico agrícola.
+              Toka es una herramienta de apoyo. No reemplaza
+              tu criterio ni el de tu técnico agrícola.
             </p>
           </div>
+
           <ParcelDemo />
         </section>
 
         <section id="como-funciona" className="steps">
           <h2>Cómo funciona</h2>
+
           <ol>
             {STEPS.map((s, i) => (
               <li key={s.title}>
-                <div className="step-icon">{ICONS[s.icon]}</div>
+                <div className="step-icon">
+                  {ICONS[s.icon]}
+                </div>
+
                 <h3>
                   {i + 1}. {s.title}
                 </h3>
+
                 <p>{s.text}</p>
               </li>
             ))}
@@ -412,24 +560,37 @@ function Landing() {
         <section id="datos" className="data">
           <div className="data-intro">
             <h2>Lo que el satélite ve en tu parcela</h2>
+
             <p>
-              Cada capa de datos aporta una pista distinta sobre agua, calor y vegetación. Toka las
-              alinea sobre tu parcela para que puedas compararlas.
+              Cada capa de datos aporta una pista distinta
+              sobre agua, calor y vegetación. Toka las alinea
+              sobre tu parcela para que puedas compararlas.
             </p>
+
             <ul className="more-data">
               {MORE_DATA.map((d) => (
                 <li key={d}>{d}</li>
               ))}
             </ul>
           </div>
+
           <LayersIllustration />
         </section>
 
         {!user && (
           <section id="empezar" className="cta">
             <h2>Empieza con tu primera parcela</h2>
-            <p>Entra con tu cuenta de Google. Es gratis y toma unos segundos.</p>
-            <button type="button" className="google-btn" onClick={openAuth}>
+
+            <p>
+              Entra con tu cuenta de Google. Es gratis
+              y toma unos segundos.
+            </p>
+
+            <button
+              type="button"
+              className="google-btn"
+              onClick={openAuth}
+            >
               <GoogleLogo />
               Continuar con Google
             </button>
@@ -439,12 +600,24 @@ function Landing() {
 
       <footer className="footer">
         <span className="logo">Toka</span>
-        <p>Proyecto para el Desafío NASA Space Apps 2026: Cambio de campo.</p>
+
+        <p>
+          Proyecto para el Desafío NASA Space Apps 2026:
+          Cambio de campo.
+        </p>
       </footer>
 
-      <AuthModal open={authOpen && !user} onClose={() => setAuthOpen(false)} onSignIn={signIn} busy={busy} error={error} />
+      <AuthModal
+        open={authOpen && !user}
+        onClose={() => setAuthOpen(false)}
+        onSignIn={handleLogin}
+        busy={busy || checkingAccount}
+        error={backendError || error}
+      />
     </>
   )
 }
+
+
 
 export default Landing

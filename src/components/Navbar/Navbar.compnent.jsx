@@ -1,225 +1,212 @@
-import React from "react";
-import { Avatar, Badge, Input, Typography } from "antd";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Avatar, Badge, Drawer, Input } from "antd";
 import {
   BellOutlined,
+  CloseOutlined,
   EnvironmentOutlined,
+  HomeOutlined,
+  LogoutOutlined,
+  MenuOutlined,
   SearchOutlined,
-  CloudOutlined,
-  DownOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import { C } from "../../views/Home/theme";
+import { SunIcon, Sprout } from "../../assets/Icons";
+import "./Navbar.css";
 
-const { Text } = Typography;
+// Mismas opciones que el sidebar. Ajusta las rutas a las de tu router.
+const NAV_ITEMS = [
+  { key: "home", label: "Inicio", path: "/inicio", icon: <HomeOutlined /> },
+  { key: "parcels", label: "Mis cultivos", path: "/mis-cultivos", icon: <Sprout size={22} /> },
+  { key: "profile", label: "Mi cuenta", path: "/mi-cuenta", icon: <UserOutlined /> },
+];
 
+/**
+ * Navbar fijo (position: fixed). La página debe dejar padding-top: 76px (64px en móvil).
+ *
+ * @param {boolean}  isMobile             true => muestra hamburguesa + menú desplegable
+ *                                        (la página NO debe renderizar el sidebar)
+ * @param {"home"|"parcels"|"profile"} active  Opción activa del menú móvil
+ * @param {Function} onLogout             Acción al cerrar sesión (menú móvil)
+ * @param {string}   search
+ * @param {Function} onSearchChange       (value) => void
+ * @param {string}   location             Ej: "San Pedro, Gto."
+ * @param {string}   temperature          Ej: "24 °C"
+ * @param {boolean}  hasNotifications     Punto naranja en la campana
+ * @param {string}   userInitial
+ * @param {Function} onNotificationsClick
+ * @param {Function} onAvatarClick
+ */
 export default function Navbar({
-  usuario = "ReplacedSpace17",
-  rol = "Agricultor",
-  ubicacion = "Guanajuato, MX",
-  clima = "24 °C · Parcialmente nublado",
-  notificaciones = 3,
+  isMobile = false,
+  active,
+  onLogout,
+  search = "",
+  onSearchChange,
+  location = "San Pedro, Gto.",
+  temperature = "24 °C",
+  hasNotifications = false,
+  userInitial = "R",
+  onNotificationsClick,
+  onAvatarClick,
 }) {
-  const inicial = usuario.charAt(0).toUpperCase();
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
+
+  const goTo = (path) => {
+    closeMenu();
+    navigate(path);
+  };
+
+  const handleLogout = () => {
+    closeMenu();
+    if (onLogout) onLogout();
+    else navigate("/login");
+  };
 
   return (
     <>
-      <style>{`
-        .toka-nav-search .ant-input-affix-wrapper {
-          background: #eef0e8;
-          border-color: transparent;
-          border-radius: 999px;
-          padding: 7px 16px;
-        }
-        .toka-nav-search .ant-input-affix-wrapper:hover,
-        .toka-nav-search .ant-input-affix-wrapper-focused {
-          background: #fff;
-          border-color: ${C.forest};
-        }
-        .toka-nav-search .ant-input { background: transparent; }
-        .toka-nav-bell:hover, .toka-nav-user:hover { background: #eef0e8; }
-        .toka-nav-bell:focus-visible, .toka-nav-user:focus-visible {
-          outline: 3px solid ${C.gold};
-          outline-offset: 2px;
-        }
-        @media (max-width: 991px) { .toka-nav-chip { display: none !important; } }
-        @media (max-width: 767px) {
-          .toka-nav-search { display: none !important; }
-          .toka-nav-userinfo { display: none !important; }
-        }
-      `}</style>
+      <header className={`navbar ${isMobile ? "navbar--mobile" : ""}`}>
+        {/* ---------- Izquierda: hamburguesa (móvil) + marca ---------- */}
+        <div className="navbar__left">
+          {isMobile && (
+            <button
+              type="button"
+              className="navbar__burger"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Abrir menú"
+              aria-expanded={menuOpen}
+            >
+              <MenuOutlined />
+            </button>
+          )}
 
-      <header
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 20,
-          height: 64,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 24,
-          padding: "0 24px",
-          background: C.surface,
-          borderBottom: `1px solid ${C.line}`,
-        }}
-      >
-        {/* Logo */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            minWidth: 150,
-          }}
-        >
-          <span
-            aria-hidden
-            style={{
-              width: 34,
-              height: 34,
-              borderRadius: 10,
-              background: C.forest,
-              display: "grid",
-              placeItems: "center",
-            }}
-          >
-            <span
-              style={{
-                width: 15,
-                height: 15,
-                background: C.gold,
-                clipPath:
-                  "polygon(10% 40%, 50% 0, 100% 35%, 80% 100%, 20% 90%)",
-              }}
-            />
-          </span>
-          <span
-            style={{
-              fontSize: 24,
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
-              color: C.forest,
-              lineHeight: 1,
-            }}
-          >
-            Toka
-          </span>
-        </div>
-
-        {/* Buscador */}
-        <div
-          className="toka-nav-search"
-          style={{ flex: 1, maxWidth: 460 }}
-        >
-          <Input
-            allowClear
-            aria-label="Buscar"
-            prefix={<SearchOutlined style={{ color: C.inkSoft }} />}
-            placeholder="Buscar parcelas, cultivos o rotaciones"
-          />
-        </div>
-
-        {/* Zona derecha */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            minWidth: 150,
-            justifyContent: "flex-end",
-          }}
-        >
-          {/* Ubicación y clima */}
-          <div
-            className="toka-nav-chip"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "6px 14px",
-              borderRadius: 999,
-              background: "#eef0e8",
-              fontSize: 13,
-              color: C.forest,
-              whiteSpace: "nowrap",
-            }}
-          >
-            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <EnvironmentOutlined style={{ color: C.earth }} />
-              {ubicacion}
-            </span>
-            <span
-              aria-hidden
-              style={{ width: 1, height: 14, background: "#cfd5c8" }}
-            />
-            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <CloudOutlined style={{ color: C.water }} />
-              {clima}
-            </span>
+          <div className="navbar__brand">
+            <span className="navbar__title">Toka</span>
+            <span className="navbar__tagline">Cultiva decisiones inteligentes</span>
           </div>
+        </div>
 
-          {/* Notificaciones */}
+        {/* ---------- Centro: buscador (solo escritorio) ---------- */}
+        {!isMobile && (
+          <Input
+            className="navbar__search"
+            variant="borderless"
+            size="large"
+            prefix={<SearchOutlined />}
+            placeholder="Buscar parcela…"
+            value={search}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            allowClear
+          />
+        )}
+
+        {/* ---------- Derecha ---------- */}
+        <div className="navbar__info">
+          {!isMobile && (
+            <>
+              <span className="navbar__chip navbar__chip--location">
+                <EnvironmentOutlined />
+                {location}
+              </span>
+              <span className="navbar__chip navbar__chip--weather">
+                <SunIcon size={20} />
+                {temperature}
+              </span>
+            </>
+          )}
+
           <button
             type="button"
-            className="toka-nav-bell"
-            aria-label={`Notificaciones: ${notificaciones} nuevas`}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: "50%",
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-              display: "grid",
-              placeItems: "center",
-              transition: "background .2s",
-            }}
+            className="navbar__bell"
+            onClick={onNotificationsClick}
+            aria-label="Notificaciones"
           >
-            <Badge count={notificaciones} size="small" color={C.gold}>
-              <BellOutlined style={{ fontSize: 19, color: C.forest }} />
+            <Badge dot={hasNotifications} color="#f07a2a" offset={[-3, 4]}>
+              <BellOutlined style={{ fontSize: 22, color: "#fff" }} />
             </Badge>
           </button>
 
-          {/* Usuario */}
-          <button
-            type="button"
-            className="toka-nav-user"
-            aria-label="Cuenta"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "4px 10px 4px 4px",
-              borderRadius: 999,
-              border: `1px solid ${C.line}`,
-              background: "transparent",
-              cursor: "pointer",
-              transition: "background .2s",
-            }}
+          <Avatar
+            className="navbar__avatar"
+            size={isMobile ? 38 : 44}
+            onClick={onAvatarClick}
+            style={{ cursor: "pointer" }}
           >
-            <Avatar
-              size={32}
-              style={{ background: C.gold, color: C.forest, fontWeight: 700 }}
-            >
-              {inicial}
-            </Avatar>
-            <span
-              className="toka-nav-userinfo"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                lineHeight: 1.2,
-              }}
-            >
-              <Text strong style={{ fontSize: 13, color: C.ink }}>
-                {usuario}
-              </Text>
-              <Text style={{ fontSize: 11, color: C.inkSoft }}>{rol}</Text>
-            </span>
-            <DownOutlined style={{ fontSize: 10, color: C.inkSoft }} />
-          </button>
+            {userInitial}
+          </Avatar>
         </div>
       </header>
+
+      {/* ---------- Menú móvil (mismo estilo que el sidebar) ---------- */}
+      {isMobile && (
+        <Drawer
+          open={menuOpen}
+          onClose={closeMenu}
+          placement="left"
+          width={290}
+          closable={false}
+          rootClassName="navbar-drawer"
+        >
+          <div className="navbar-menu">
+            <div className="navbar-menu__head">
+              <div className="navbar-menu__brand">
+                <strong>Toka</strong>
+                <span>Cultiva decisiones inteligentes</span>
+              </div>
+              <button type="button" className="navbar-menu__close" onClick={closeMenu} aria-label="Cerrar menú">
+                <CloseOutlined />
+              </button>
+            </div>
+
+            <Input
+              className="navbar-menu__search"
+              size="large"
+              prefix={<SearchOutlined />}
+              placeholder="Buscar parcela…"
+              value={search}
+              onChange={(e) => onSearchChange?.(e.target.value)}
+              allowClear
+            />
+
+            <span className="navbar-menu__divider" />
+
+            <nav className="navbar-menu__nav" aria-label="Navegación principal">
+              {NAV_ITEMS.map(({ key, label, path, icon }) => {
+                const isActive = active === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    className={`navbar-menu__item ${isActive ? "is-active" : ""}`}
+                    onClick={() => goTo(path)}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <span className="navbar-menu__icon">{icon}</span>
+                    {label}
+                  </button>
+                );
+              })}
+            </nav>
+
+            <div className="navbar-menu__foot">
+              <div className="navbar-menu__meta">
+                <span><EnvironmentOutlined /> {location}</span>
+                <span><SunIcon size={18} /> {temperature}</span>
+              </div>
+
+              <span className="navbar-menu__divider" />
+
+              <button type="button" className="navbar-menu__item" onClick={handleLogout}>
+                <span className="navbar-menu__icon"><LogoutOutlined /></span>
+                Cerrar sesión
+              </button>
+            </div>
+          </div>
+        </Drawer>
+      )}
     </>
   );
 }

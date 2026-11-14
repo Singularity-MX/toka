@@ -1,2 +1,1 @@
-
-export const urlBackend =  'http://localhost:3000';
+export const urlBackend = import.meta.env.VITE_URL_BACKEND;

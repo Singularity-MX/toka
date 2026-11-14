@@ -1,0 +1,105 @@
+.sidebar-desktop {
+  position: fixed;
+  top: 50%;
+  left: 24px;
+  transform: translateY(-50%);
+  z-index: 50;
+}
+
+.sidebar-desktop__nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 12px;
+  background: #ffffff;
+  border-radius: 50px 50px 20px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.sidebar-desktop__logo {
+  width: 48px;
+  height: 48px;
+}
+
+.sidebar-desktop__divider {
+  width: 40px;
+  height: 2px;
+  background: #e3e3e3;
+}
+
+.sidebar-desktop__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.sidebar-desktop__item:hover,
+.sidebar-desktop__item.is-active {
+  background: #e3efdc;
+}
+
+.sidebar-desktop__item:focus-visible {
+  outline: 2px solid #1b3a2f;
+  outline-offset: 2px;
+}
+
+.sidebar-desktop__icon {
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+}
+
+/* Tooltip a la derecha */
+.sidebar-desktop__item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 18px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #1f1f1f;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+/* Flechita del tooltip */
+.sidebar-desktop__item::before {
+  content: "";
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border-left: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+  transform: translateY(-50%) rotate(45deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 1;
+}
+
+.sidebar-desktop__item:hover::after,
+.sidebar-desktop__item:hover::before,
+.sidebar-desktop__item:focus-visible::after,
+.sidebar-desktop__item:focus-visible::before {
+  opacity: 1;
+}

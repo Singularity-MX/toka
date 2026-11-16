@@ -11,7 +11,7 @@ function Dashboard() {
     <div>
       <h1>Hola, {user.displayName}</h1>
       <p>{user.email}</p>
-      <p>{user.uid}</p>
+     
 
       <img src={user.photoURL} alt="Perfil" />
 

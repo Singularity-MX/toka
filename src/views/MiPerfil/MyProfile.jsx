@@ -129,6 +129,7 @@ const MyProfile = () => {
           userInitial={USER.name.charAt(0)}
           onAvatarClick={() => navigate("/mi-cuenta")}
         />
+        
 
         {/* Escritorio: sidebar fijo, centrado verticalmente. Móvil: el menú vive en el Navbar. */}
         {!isMobile && <SidebarDesktop active="profile" />}

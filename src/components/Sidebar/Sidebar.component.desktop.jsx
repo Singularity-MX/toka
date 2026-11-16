@@ -12,14 +12,15 @@ import parcelsIconActive from "./assets/icons/parcelsActive.svg";
 import myProfileIconActive from "./assets/icons/profileActive.svg";
 
 import logo from "./assets/logo/logo.svg";
-
+import { auth } from "../../services/firebase";
+import { useAuth } from '../../auth/useAuth'
+import { nav } from "framer-motion/client";
 // Ajusta las rutas a las de tu router
 const NAV_ITEMS = [
-  { key: "home", label: "Inicio", path: "/home", icon: homeIcon, iconActive: homeIconActive },
-  { key: "parcels", label: "Mis cultivos", path: "/percels", icon: parcelsIcon, iconActive: parcelsIconActive },
-  { key: "profile", label: "Mi cuenta", path: "/profile", icon: myProfileIcon, iconActive: myProfileIconActive },
-];
-
+  { key: "home", label: "Home", path: "/home", icon: homeIcon, iconActive: homeIconActive },
+  { key: "parcels", label: "My Parcels", path: "/parcels", icon: parcelsIcon, iconActive: parcelsIconActive },
+  { key: "profile", label: "My Account", path: "/profile", icon: myProfileIcon, iconActive: myProfileIconActive },
+];  
 /**
  * @param {"home" | "parcels" | "profile"} active  Opción que se muestra activa (usa su ícono "Active")
  * @param {Function} onLogout                       Acción al cerrar sesión
@@ -27,9 +28,19 @@ const NAV_ITEMS = [
 export default function SidebarDesktop({ active, onLogout }) {
   const navigate = useNavigate();
 
+  const {
+      user,
+      loading,
+      busy,
+      error,
+      signIn,
+      logout,
+      clearError
+    } = useAuth()
+
   const handleLogout = () => {
-    if (onLogout) onLogout();
-    else navigate("/login");
+    logout();
+    navigate("/");
   };
 
   return (

@@ -14,6 +14,7 @@ import {
 import { SunIcon, Sprout } from "../../assets/Icons";
 import "./Navbar.css";
 
+import { auth } from "../../services/firebase";
 // Mismas opciones que el sidebar. Ajusta las rutas a las de tu router.
 const NAV_ITEMS = [
   { key: "home", label: "Inicio", path: "/inicio", icon: <HomeOutlined /> },
@@ -37,14 +38,16 @@ const NAV_ITEMS = [
  * @param {Function} onNotificationsClick
  * @param {Function} onAvatarClick
  */
+
 export default function Navbar({
   isMobile = false,
   active,
   onLogout,
   search = "",
   onSearchChange,
-  location = "San Pedro, Gto.",
-  temperature = "24 °C",
+  location = "Ubicación no disponible",
+  temperature = "-- °C",
+  condition = "",
   hasNotifications = false,
   userInitial = "R",
   onNotificationsClick,
@@ -54,7 +57,7 @@ export default function Navbar({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
-
+  
   const goTo = (path) => {
     closeMenu();
     navigate(path);
@@ -65,6 +68,8 @@ export default function Navbar({
     if (onLogout) onLogout();
     else navigate("/login");
   };
+
+ 
 
   return (
     <>
@@ -85,7 +90,7 @@ export default function Navbar({
 
           <div className="navbar__brand">
             <span className="navbar__title">Toka</span>
-            <span className="navbar__tagline">Cultiva decisiones inteligentes</span>
+
           </div>
         </div>
 
@@ -133,6 +138,7 @@ export default function Navbar({
             className="navbar__avatar"
             size={isMobile ? 38 : 44}
             onClick={onAvatarClick}
+            src={auth.currentUser?.photoURL}
             style={{ cursor: "pointer" }}
           >
             {userInitial}

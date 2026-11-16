@@ -12,8 +12,8 @@ import Navbar from "../../components/Navbar/Navbar.compnent";
 import SidebarDesktop from "../../components/Sidebar/Sidebar.component.desktop";
 import { Drop, Sprout, SunIcon, Waves } from "../../assets/Icons";
 import "./Home.css";
-
-/* Tema de Ant Design (muévelo a tu App.jsx si quieres que aplique a toda la app) */
+import { auth } from "../../services/firebase";
+/* Ant Design theme (move it to your App.jsx if you want it to apply to the whole app) */
 const theme = {
   token: {
     colorPrimary: "#4a6d2b",
@@ -35,54 +35,54 @@ const theme = {
   },
 };
 
-/* ---------- Datos inventados: reemplázalos con los de tu API ---------- */
-const USER_NAME = "Ricardo";
+/* ---------- Made-up data: replace it with data from your API ---------- */
+const USER_NAME = auth.currentUser?.displayName || "Singularity";
 
 const KPIS = [
-  { key: "water", icon: <Drop size={26} />, tone: "blue", label: "Ahorro de agua", value: "+16%", delta: "+3.2 pts vs. mes anterior" },
-  { key: "soil", icon: <Sprout size={26} />, tone: "green", label: "Salud del suelo", value: "78/100", delta: "+5 pts vs. mes anterior" },
-  { key: "income", icon: <DollarCircleOutlined style={{ fontSize: 26 }} />, tone: "gold", label: "Ingreso estimado", value: "$48,200", delta: "+12% vs. ciclo pasado" },
-  { key: "parcels", icon: <Waves size={26} />, tone: "green", label: "Parcelas activas", value: "2 de 3", delta: "1 en revisión" },
+  { key: "water", icon: <Drop size={26} />, tone: "blue", label: "Water savings", value: "+16%", delta: "+3.2 pts vs. last month" },
+  { key: "soil", icon: <Sprout size={26} />, tone: "green", label: "Soil health", value: "78/100", delta: "+5 pts vs. last month" },
+  { key: "income", icon: <DollarCircleOutlined style={{ fontSize: 26 }} />, tone: "gold", label: "Estimated income", value: "$48,200", delta: "+12% vs. last cycle" },
+  { key: "parcels", icon: <Waves size={26} />, tone: "green", label: "Active plots", value: "2 of 3", delta: "1 under review" },
 ];
 
 const WATER_SERIES = {
-  "7d": { labels: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"], values: [11, 13, 12, 15, 14, 17, 16] },
-  "30d": { labels: ["Sem 1", "Sem 2", "Sem 3", "Sem 4"], values: [9, 12, 14, 16] },
-  "90d": { labels: ["Ago", "Sep", "Oct", "Nov"], values: [6, 10, 13, 16] },
+  "7d": { labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], values: [11, 13, 12, 15, 14, 17, 16] },
+  "30d": { labels: ["Wk 1", "Wk 2", "Wk 3", "Wk 4"], values: [9, 12, 14, 16] },
+  "90d": { labels: ["Aug", "Sep", "Oct", "Nov"], values: [6, 10, 13, 16] },
 };
 
 const CROPS = [
-  { name: "Maíz", ha: 4.2, color: "#4a6d2b" },
-  { name: "Frijol", ha: 3.8, color: "#d9a21f" },
-  { name: "Sorgo", ha: 4.5, color: "#8fbe55" },
+  { name: "Corn", ha: 4.2, color: "#4a6d2b" },
+  { name: "Beans", ha: 3.8, color: "#d9a21f" },
+  { name: "Sorghum", ha: 4.5, color: "#8fbe55" },
 ];
 
 const PARCELS = [
-  { id: 1, name: "Parcela Norte", crop: "Maíz", ha: 4.2, status: "active", health: 82 },
-  { id: 2, name: "Parcela Centro", crop: "Frijol", ha: 3.8, status: "active", health: 76 },
-  { id: 3, name: "Parcela Sur", crop: "Sorgo", ha: 4.5, status: "review", health: 61 },
+  { id: 1, name: "North Plot", crop: "Corn", ha: 4.2, status: "active", health: 82 },
+  { id: 2, name: "Central Plot", crop: "Beans", ha: 3.8, status: "active", health: 76 },
+  { id: 3, name: "South Plot", crop: "Sorghum", ha: 4.5, status: "review", health: 61 },
 ];
 
 const ACTIVITIES = [
-  { color: "#5b93df", title: "Riego programado", where: "Parcela Norte", when: "Hoy · 6:00 pm" },
-  { color: "#f07a2a", title: "Revisión técnica", where: "Parcela Sur", when: "Mañana · 9:30 am" },
-  { color: "#4a6d2b", title: "Aplicar composta", where: "Parcela Centro", when: "Mié 18 nov" },
-  { color: "#d9a21f", title: "Cosecha estimada", where: "Parcela Norte", when: "2 dic" },
+  { color: "#5b93df", title: "Scheduled irrigation", where: "North Plot", when: "Today · 6:00 pm" },
+  { color: "#f07a2a", title: "Technical review", where: "South Plot", when: "Tomorrow · 9:30 am" },
+  { color: "#4a6d2b", title: "Apply compost", where: "Central Plot", when: "Wed Nov 18" },
+  { color: "#d9a21f", title: "Estimated harvest", where: "North Plot", when: "Dec 2" },
 ];
 
 const FORECAST = [
-  { day: "Hoy", icon: "sun", temp: "24°", rain: 0 },
-  { day: "Dom", icon: "sun", temp: "25°", rain: 5 },
-  { day: "Lun", icon: "cloud", temp: "22°", rain: 30 },
-  { day: "Mar", icon: "rain", temp: "20°", rain: 70 },
-  { day: "Mié", icon: "cloud", temp: "21°", rain: 25 },
+  { day: "Today", icon: "sun", temp: "24°", rain: 0 },
+  { day: "Sun", icon: "sun", temp: "25°", rain: 5 },
+  { day: "Mon", icon: "cloud", temp: "22°", rain: 30 },
+  { day: "Tue", icon: "rain", temp: "20°", rain: 70 },
+  { day: "Wed", icon: "cloud", temp: "21°", rain: 25 },
 ];
 
-/* ---------- Utilidades ---------- */
+/* ---------- Utilities ---------- */
 function greeting(hour) {
-  if (hour < 12) return "Buenos días";
-  if (hour < 19) return "Buenas tardes";
-  return "Buenas noches";
+  if (hour < 12) return "Good morning";
+  if (hour < 19) return "Good afternoon";
+  return "Good evening";
 }
 
 const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -104,7 +104,7 @@ function useIsMobile(breakpoint = 768) {
   return isMobile;
 }
 
-/* ---------- Gráfica de área (SVG, sin librerías) ---------- */
+/* ---------- Area chart (SVG, no libraries) ---------- */
 function AreaChart({ labels, values }) {
   const [hover, setHover] = useState(null);
 
@@ -134,7 +134,7 @@ function AreaChart({ labels, values }) {
   const boxX = Math.min(Math.max(ax - boxW / 2, pad.left), W - pad.right - boxW);
 
   return (
-    <svg className="area-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Gráfica de ahorro de agua">
+    <svg className="area-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Water savings chart">
       <defs>
         <linearGradient id="waterFill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#5b93df" stopOpacity="0.35" />
@@ -168,11 +168,11 @@ function AreaChart({ labels, values }) {
       <g transform={`translate(${boxX} ${Math.max(ay - 50, 2)})`} className="chart-tip">
         <rect width={boxW} height="34" rx="10" fill="#17332b" />
         <text x={boxW / 2} y="22" textAnchor="middle" fill="#fff" fontSize="14" fontWeight="800">
-          +{values[active]}% agua
+          +{values[active]}% water
         </text>
       </g>
 
-      {/* Zonas sensibles al mouse / toque */}
+      {/* Mouse / touch sensitive areas */}
       {pts.map(([x], i) => (
         <rect
           key={`hit-${i}`}
@@ -190,7 +190,7 @@ function AreaChart({ labels, values }) {
   );
 }
 
-/* ---------- Dona de cultivos ---------- */
+/* ---------- Crops donut ---------- */
 function Donut({ data }) {
   const total = data.reduce((s, d) => s + d.ha, 0);
   const r = 70;
@@ -198,7 +198,7 @@ function Donut({ data }) {
   let offset = 0;
 
   return (
-    <svg className="donut" viewBox="0 0 200 200" role="img" aria-label="Distribución de cultivos por hectárea">
+    <svg className="donut" viewBox="0 0 200 200" role="img" aria-label="Crop distribution by hectare">
       <circle cx="100" cy="100" r={r} fill="none" stroke="#eef0e2" strokeWidth="26" />
       {data.map((d) => {
         const len = (d.ha / total) * c;
@@ -221,7 +221,7 @@ function Donut({ data }) {
         return el;
       })}
       <text x="100" y="98" textAnchor="middle" className="donut__value">{total.toFixed(1)}</text>
-      <text x="100" y="120" textAnchor="middle" className="donut__label">hectáreas</text>
+      <text x="100" y="120" textAnchor="middle" className="donut__label">hectares</text>
     </svg>
   );
 }
@@ -231,7 +231,7 @@ function ForecastIcon({ type }) {
   return <CloudOutlined style={{ fontSize: 28, color: type === "rain" ? "#5b93df" : "#8aa09a" }} />;
 }
 
-/* ---------- Vista ---------- */
+/* ---------- View ---------- */
 const Home = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -240,7 +240,7 @@ const Home = () => {
 
   const now = useMemo(() => new Date(), []);
   const dateText = useMemo(
-    () => capitalize(new Intl.DateTimeFormat("es-MX", { weekday: "long", day: "numeric", month: "long" }).format(now)),
+    () => capitalize(new Intl.DateTimeFormat("en-US", { weekday: "long", day: "numeric", month: "long" }).format(now)),
     [now]
   );
   const series = WATER_SERIES[range];
@@ -260,7 +260,7 @@ const Home = () => {
           onAvatarClick={() => navigate("/mi-cuenta")}
         />
 
-        {/* Escritorio: sidebar fijo, centrado verticalmente. Móvil: el menú vive en el Navbar. */}
+        {/* Desktop: fixed sidebar, vertically centered. Mobile: the menu lives in the Navbar. */}
         {!isMobile && <SidebarDesktop active="home" />}
 
         <main className="home__main">
@@ -281,11 +281,11 @@ const Home = () => {
               <Typography.Title level={1} className="hero__title">
                 {greeting(now.getHours())}, {USER_NAME}
               </Typography.Title>
-              <p>Así van tus cultivos hoy. Sin lluvia en las próximas 48 horas: buen momento para regar.</p>
+              <p>Here’s how your crops are doing today. No rain in the next 48 hours: a good time to irrigate.</p>
             </div>
           </section>
 
-          {/* ---------- KPIs (encima de la ilustración) ---------- */}
+          {/* ---------- KPIs (on top of the illustration) ---------- */}
           <section className="kpis">
             {KPIS.map(({ key, icon, tone, label, value, delta }) => (
               <div className="kpi" key={key}>
@@ -299,22 +299,22 @@ const Home = () => {
             ))}
           </section>
 
-          {/* ---------- Gráficas ---------- */}
+          {/* ---------- Charts ---------- */}
           <Row gutter={[24, 24]} className="block">
             <Col xs={24} xl={16}>
               <article className="panel">
                 <header className="panel__head">
                   <div>
-                    <h2>Ahorro de agua</h2>
-                    <p>Comparado con el riego tradicional</p>
+                    <h2>Water savings</h2>
+                    <p>Compared with traditional irrigation</p>
                   </div>
                   <Segmented
                     value={range}
                     onChange={setRange}
                     options={[
-                      { value: "7d", label: "7 días" },
-                      { value: "30d", label: "30 días" },
-                      { value: "90d", label: "90 días" },
+                      { value: "7d", label: "7 days" },
+                      { value: "30d", label: "30 days" },
+                      { value: "90d", label: "90 days" },
                     ]}
                   />
                 </header>
@@ -326,8 +326,8 @@ const Home = () => {
               <article className="panel">
                 <header className="panel__head">
                   <div>
-                    <h2>Mis cultivos</h2>
-                    <p>Superficie por cultivo</p>
+                    <h2>My crops</h2>
+                    <p>Area per crop</p>
                   </div>
                 </header>
                 <div className="crops">
@@ -346,17 +346,17 @@ const Home = () => {
             </Col>
           </Row>
 
-          {/* ---------- Parcelas, actividades y recomendación ---------- */}
+          {/* ---------- Plots, activities and recommendation ---------- */}
           <Row gutter={[24, 24]} className="block">
             <Col xs={24} xl={10}>
               <article className="panel">
                 <header className="panel__head">
                   <div>
-                    <h2>Estado de mis parcelas</h2>
-                    <p>Salud general del suelo y cultivo</p>
+                    <h2>Status of my plots</h2>
+                    <p>Overall soil and crop health</p>
                   </div>
                   <Button type="link" className="link-btn" onClick={() => navigate("/mis-cultivos")}>
-                    Ver todas <ArrowRightOutlined />
+                    View all <ArrowRightOutlined />
                   </Button>
                 </header>
 
@@ -368,7 +368,7 @@ const Home = () => {
                         <div className="plot__top">
                           <strong>{p.name}</strong>
                           <Tag bordered={false} className={`tag tag--${p.status}`}>
-                            {p.status === "active" ? "Activa" : "En revisión"}
+                            {p.status === "active" ? "Active" : "Under review"}
                           </Tag>
                         </div>
                         <span className="plot__sub">{p.crop} · {p.ha} ha</span>
@@ -391,8 +391,8 @@ const Home = () => {
               <article className="panel">
                 <header className="panel__head">
                   <div>
-                    <h2>Próximas actividades</h2>
-                    <p>Lo que viene en tus parcelas</p>
+                    <h2>Upcoming activities</h2>
+                    <p>What’s coming up on your plots</p>
                   </div>
                 </header>
 
@@ -415,23 +415,23 @@ const Home = () => {
             <Col xs={24} md={12} xl={6}>
               <article className="tip">
                 <span className="tip__icon"><BulbOutlined /></span>
-                <h2>Toka recomienda</h2>
+                <h2>Toka recommends</h2>
                 <p>
-                  Después de cosechar el maíz de la <b>Parcela Norte</b>, siembra <b>frijol</b>: fija nitrógeno
-                  en el suelo y puede ahorrarte hasta un 12% de agua.
+                  After harvesting the corn on the <b>North Plot</b>, plant <b>beans</b>: they fix nitrogen
+                  in the soil and can save you up to 12% of water.
                 </p>
                 <Button shape="round" size="large" className="tip__btn" onClick={() => navigate("/mis-cultivos/1")}>
-                  Ver recomendación <ArrowRightOutlined />
+                  See recommendation <ArrowRightOutlined />
                 </Button>
               </article>
             </Col>
           </Row>
 
-          {/* ---------- Pronóstico ---------- */}
+          {/* ---------- Forecast ---------- */}
           <section className="panel forecast">
             <header className="panel__head">
               <div>
-                <h2>Pronóstico de la semana</h2>
+                <h2>Weekly forecast</h2>
                 <p>San Pedro, Gto.</p>
               </div>
             </header>

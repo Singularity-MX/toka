@@ -1,1 +1,1 @@
-export const urlBackend = import.meta.env.VITE_URL_BACKEND;
+export const urlBackend = import.meta.env.VITE_URL_BACKEND_TOKAFRONT;

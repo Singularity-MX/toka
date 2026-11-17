@@ -365,7 +365,7 @@ const handleLogin = async () => {
         'Content-Type': 'application/json',
       },
     })
-
+    console.log('Backend response status:', urlBackend+'/auth/session', response.status, response.statusText)
     if (!response.ok) {
       const errorBody = await response.json().catch(() => ({}))
       throw new Error(

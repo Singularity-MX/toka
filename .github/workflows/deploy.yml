@@ -1,4 +1,3 @@
-
 name: Deploy to Hostinger
 
 on:
@@ -25,6 +24,8 @@ jobs:
 
       - name: Build project
         run: npm run build
+        env:
+          VITE_URL_BACKEND_TOKAFRONT: ${{ vars.VITE_URL_BACKEND_TOKAFRONT }}
 
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.9.0

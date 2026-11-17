@@ -29,11 +29,11 @@ import {
 } from "@ant-design/icons";
 
 import "leaflet/dist/leaflet.css";
-import "./AddPercels.css";
+import "./AddParcel.css";
 
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../services/firebase";
-import { urlBackend } from "../../config/backend.config";
+import { auth } from "@/services/firebase";
+import { urlBackend } from "@/config/backend.config";
 
 import {
   polygonAreaM2,
@@ -41,7 +41,7 @@ import {
   fmt,
   vertexIcon,
   TILES,
-} from "../../utils/geo";
+} from "@/utils/geo";
 
 const theme = {
   token: {

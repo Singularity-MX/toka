@@ -24,10 +24,10 @@ import {
 } from "antd";
 
 import "leaflet/dist/leaflet.css";
-import "./ViewPercel.css";
+import "./ParcelDetail.css";
 
-import { auth } from "../../services/firebase";
-import { urlBackend } from "../../config/backend.config";
+import { auth } from "@/services/firebase";
+import { urlBackend } from "@/config/backend.config";
 
 /* ---------- Theme ---------- */
 const theme = {

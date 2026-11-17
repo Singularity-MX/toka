@@ -20,14 +20,15 @@ import {
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import Navbar from "../../components/Navbar/Navbar.compnent";
-import SidebarDesktop from "../../components/Sidebar/Sidebar.component.desktop";
-import { Sprout, Waves, Wheat } from "../../assets/Icons";
-import "./MyPercels.css";
-import useWeatherLocation from "../../hooks/useWeatherLocation";
-import { auth } from "../../services/firebase";
-import { urlBackend } from "../../config/backend.config";
-import { polygonAreaM2 } from "../../utils/geo";
+import Navbar from "@/components/Navbar/Navbar";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import SidebarDesktop from "@/components/Sidebar/SidebarDesktop";
+import { Sprout, Waves, Wheat } from "@/components/icons/Icons";
+import "./ParcelsList.css";
+import useWeatherLocation from "@/hooks/useWeatherLocation";
+import { auth } from "@/services/firebase";
+import { urlBackend } from "@/config/backend.config";
+import { polygonAreaM2 } from "@/utils/geo";
 
 const theme = {
   token: {
@@ -200,23 +201,6 @@ function ParcelCard({ parcel, onClick }) {
 }
 
 /* ---------- Mobile detection (<= 768px) ---------- */
-function useIsMobile(breakpoint = 768) {
-  const query = `(max-width: ${breakpoint}px)`;
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.matchMedia(query).matches
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia(query);
-    const onChange = (e) => setIsMobile(e.matches);
-    setIsMobile(mq.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, [query]);
-
-  return isMobile;
-}
-
 /* ---------- View ---------- */
 const MyParcels = () => {
   const navigate = useNavigate();

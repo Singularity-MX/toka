@@ -9,9 +9,10 @@ import {
   MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import Navbar from "../../components/Navbar/Navbar.compnent";
-import SidebarDesktop from "../../components/Sidebar/Sidebar.component.desktop";
-import { Drop, Sprout, Waves, Wheat } from "../../assets/Icons";
+import Navbar from "@/components/Navbar/Navbar";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import SidebarDesktop from "@/components/Sidebar/SidebarDesktop";
+import { Drop, Sprout, Waves, Wheat } from "@/components/icons/Icons";
 import "./MyProfile.css";
 
 /* Tema de Ant Design (muévelo a tu App.jsx si quieres que aplique a toda la app) */
@@ -67,23 +68,6 @@ const formatDate = (iso) =>
   );
 
 /* ---------- Detecta pantalla móvil (<= 768px) ---------- */
-function useIsMobile(breakpoint = 768) {
-  const query = `(max-width: ${breakpoint}px)`;
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.matchMedia(query).matches
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia(query);
-    const onChange = (e) => setIsMobile(e.matches);
-    setIsMobile(mq.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, [query]);
-
-  return isMobile;
-}
-
 function StatCard({ icon, tone, value, label }) {
   return (
     <div className="stat-card">
@@ -127,7 +111,7 @@ const MyProfile = () => {
           temperature="24 °C"
           hasNotifications
           userInitial={USER.name.charAt(0)}
-          onAvatarClick={() => navigate("/mi-cuenta")}
+          onAvatarClick={() => navigate("/profile")}
         />
         
 

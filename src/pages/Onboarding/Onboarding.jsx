@@ -10,12 +10,12 @@ import {
   PlusOutlined,
   ShopOutlined,
 } from "@ant-design/icons";
-import { auth } from "../../services/firebase";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
-import Loader from "../../components/Loader/Loader";
-import { Drop, Sprout, Waves, Wheat } from "../../assets/Icons";
-import "./NewUserConfig.css";
-import { urlBackend } from '../../config/backend.config'
+import { auth } from "@/services/firebase";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import Loader from "@/components/Loader/Loader";
+import { Drop, Sprout, Waves, Wheat } from "@/components/icons/Icons";
+import "./Onboarding.css";
+import { urlBackend } from '@/config/backend.config'
 
 /* ---------- Theme (same as MyProfile) ---------- */
 const theme = {

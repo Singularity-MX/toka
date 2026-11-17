@@ -13,7 +13,7 @@ import {
   signOut
 } from 'firebase/auth'
 
-import { auth, googleProvider } from '../services/firebase'
+import { auth, googleProvider } from '@/services/firebase'
 
 const MESSAGES = {
   'auth/popup-blocked': 'Tu navegador bloqueó la ventana de Google.',

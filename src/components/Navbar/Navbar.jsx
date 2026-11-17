@@ -11,15 +11,15 @@ import {
   SearchOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { SunIcon, Sprout } from "../../assets/Icons";
+import { SunIcon, Sprout } from "@/components/icons/Icons";
 import "./Navbar.css";
 
-import { auth } from "../../services/firebase";
+import { auth } from "@/services/firebase";
 // Mismas opciones que el sidebar. Ajusta las rutas a las de tu router.
 const NAV_ITEMS = [
   { key: "home", label: "Inicio", path: "/inicio", icon: <HomeOutlined /> },
-  { key: "parcels", label: "Mis cultivos", path: "/mis-cultivos", icon: <Sprout size={22} /> },
-  { key: "profile", label: "Mi cuenta", path: "/mi-cuenta", icon: <UserOutlined /> },
+  { key: "parcels", label: "Mis cultivos", path: "/parcels", icon: <Sprout size={22} /> },
+  { key: "profile", label: "Mi cuenta", path: "/profile", icon: <UserOutlined /> },
 ];
 
 /**
@@ -66,7 +66,7 @@ export default function Navbar({
   const handleLogout = () => {
     closeMenu();
     if (onLogout) onLogout();
-    else navigate("/login");
+    else navigate("/");
   };
 
  

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./style/SidebarDesktop.css";
+import "./SidebarDesktop.css";
 //icons
 import homeIcon from "./assets/icons/home.svg";
 import parcelsIcon from "./assets/icons/parcels.svg";
@@ -12,8 +12,8 @@ import parcelsIconActive from "./assets/icons/parcelsActive.svg";
 import myProfileIconActive from "./assets/icons/profileActive.svg";
 
 import logo from "./assets/logo/logo.svg";
-import { auth } from "../../services/firebase";
-import { useAuth } from '../../auth/useAuth'
+import { auth } from "@/services/firebase";
+import { useAuth } from '@/auth/useAuth'
 import { nav } from "framer-motion/client";
 // Ajusta las rutas a las de tu router
 const NAV_ITEMS = [

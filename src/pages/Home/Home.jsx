@@ -8,11 +8,12 @@ import {
   CloudOutlined,
   DollarCircleOutlined,
 } from "@ant-design/icons";
-import Navbar from "../../components/Navbar/Navbar.compnent";
-import SidebarDesktop from "../../components/Sidebar/Sidebar.component.desktop";
-import { Drop, Sprout, SunIcon, Waves } from "../../assets/Icons";
+import Navbar from "@/components/Navbar/Navbar";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import SidebarDesktop from "@/components/Sidebar/SidebarDesktop";
+import { Drop, Sprout, SunIcon, Waves } from "@/components/icons/Icons";
 import "./Home.css";
-import { auth } from "../../services/firebase";
+import { auth } from "@/services/firebase";
 /* Ant Design theme (move it to your App.jsx if you want it to apply to the whole app) */
 const theme = {
   token: {
@@ -86,23 +87,6 @@ function greeting(hour) {
 }
 
 const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-
-function useIsMobile(breakpoint = 768) {
-  const query = `(max-width: ${breakpoint}px)`;
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.matchMedia(query).matches
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia(query);
-    const onChange = (e) => setIsMobile(e.matches);
-    setIsMobile(mq.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, [query]);
-
-  return isMobile;
-}
 
 /* ---------- Area chart (SVG, no libraries) ---------- */
 function AreaChart({ labels, values }) {
@@ -257,7 +241,7 @@ const Home = () => {
           temperature="24 °C"
           hasNotifications
           userInitial={USER_NAME.charAt(0)}
-          onAvatarClick={() => navigate("/mi-cuenta")}
+          onAvatarClick={() => navigate("/profile")}
         />
 
         {/* Desktop: fixed sidebar, vertically centered. Mobile: the menu lives in the Navbar. */}
@@ -355,14 +339,14 @@ const Home = () => {
                     <h2>Status of my plots</h2>
                     <p>Overall soil and crop health</p>
                   </div>
-                  <Button type="link" className="link-btn" onClick={() => navigate("/mis-cultivos")}>
+                  <Button type="link" className="link-btn" onClick={() => navigate("/parcels")}>
                     View all <ArrowRightOutlined />
                   </Button>
                 </header>
 
                 <ul className="plots">
                   {PARCELS.map((p) => (
-                    <li key={p.id} className="plot" onClick={() => navigate(`/mis-cultivos/${p.id}`)}>
+                    <li key={p.id} className="plot" onClick={() => navigate(`/parcels/${p.id}`)}>
                       <span className="plot__icon"><Sprout size={22} /></span>
                       <div className="plot__info">
                         <div className="plot__top">
@@ -420,7 +404,7 @@ const Home = () => {
                   After harvesting the corn on the <b>North Plot</b>, plant <b>beans</b>: they fix nitrogen
                   in the soil and can save you up to 12% of water.
                 </p>
-                <Button shape="round" size="large" className="tip__btn" onClick={() => navigate("/mis-cultivos/1")}>
+                <Button shape="round" size="large" className="tip__btn" onClick={() => navigate("/parcels")}>
                   See recommendation <ArrowRightOutlined />
                 </Button>
               </article>
